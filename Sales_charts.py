@@ -13,6 +13,7 @@ try:
     combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')  # Skip bad lines
     st.write(combined_data.head())  # Display the first few rows
     st.write(combined_data.columns)  # Print the columns to check
+    combined_data.columns = combined_data.columns.str.strip()  # Strip spaces from column names
 except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()  # Stop execution if the file cannot be loaded
@@ -23,7 +24,6 @@ if 'date' in combined_data.columns:
 else:
     st.error("The 'date' column is missing from the data.")
     st.stop()
-
 # Sidebar for user inputs
 st.sidebar.header("User  Input Features")
 show_data = st.sidebar.checkbox('Show Data', False)
