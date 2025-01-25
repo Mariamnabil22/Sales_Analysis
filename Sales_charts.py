@@ -7,7 +7,7 @@ import os
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
 # Load  dataset
-csv_file_path = r'D:\Epsilon Python\fina project\filtered_data.csv'
+csv_file_path = r'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 
 # Check if the file exists
 if os.path.exists(csv_file_path):
