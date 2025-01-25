@@ -1,22 +1,15 @@
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-import os
-
 # Set up the Streamlit page configuration
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
-# Load  dataset
-csv_file_path = r'D:\Epsilon Python\fina project\filtered_data.csv'
+# Load dataset from OneDrive
+csv_file_path = 'https://1drv.ms/x/c/9f3ccf37d8e48827/ESuCadfN6h5Ims6K9z9mNgUBqVEiI2XxhiD0F-vnRszrtQ?download=1'
 
-# Check if the file exists
-if os.path.exists(csv_file_path):
+# Load the CSV file
+try:
     combined_data = pd.read_csv(csv_file_path, parse_dates=['date'])  # Ensure 'date' is parsed as datetime
-else:
-    st.error("The combined data file does not exist. Please check the file path.")
-    st.stop()  # Stop execution if the file is not found
-
-# st.write(combined_data.columns) 
+except Exception as e:
+    st.error(f"Error loading data: {e}")
+    st.stop()  # Stop execution if the file cannot be loaded
 
 # If 'Year' column does not exist, create it from the 'date' column
 if 'Year' not in combined_data.columns:
