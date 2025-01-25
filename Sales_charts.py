@@ -7,9 +7,12 @@ st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
 # Load dataset from OneDrive
 csv_file_path = r'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
+
 # Load the CSV file
 try:
-    combined_data = pd.read_csv(csv_file_path, parse_dates=['date'])  # Ensure 'date' is parsed as datetime
+    combined_data = pd.read_csv(csv_file_path)  # Load without parse_dates first
+    st.write(combined_data.columns)  # Print the columns to check
+    combined_data['date'] = pd.to_datetime(combined_data['date'])  # Convert 'date' column to datetime
 except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()  # Stop execution if the file cannot be loaded
@@ -52,6 +55,7 @@ else:
         sales_by_month['date'] = sales_by_month['date'].dt.to_timestamp()  # Convert back to timestamp for plotting
         
         fig_sales = px.line(sales_by_month, x='date', y='total price', title='Total Sales by Month', markers=True)
+       
         st.plotly_chart(fig_sales, use_container_width=True)
 
         # Total Quantity by Outlet
