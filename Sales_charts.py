@@ -10,13 +10,10 @@ csv_file_path = r'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 
 # Load the CSV file
 try:
-    combined_data = pd.read_csv(csv_file_path)  # Load without parse_dates first
-    st.write(combined_data.columns)  # Print the columns to check
-    combined_data['date'] = pd.to_datetime(combined_data['date'])  # Convert 'date' column to datetime
+    combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')  # Skip bad lines
+    print(combined_data.columns)  # Print the columns to check
 except Exception as e:
-    st.error(f"Error loading data: {e}")
-    st.stop()  # Stop execution if the file cannot be loaded
-
+    print(f"Error loading data: {e}")
 # If 'Year' column does not exist, create it from the 'date' column
 if 'Year' not in combined_data.columns:
     combined_data['Year'] = combined_data['date'].dt.year
