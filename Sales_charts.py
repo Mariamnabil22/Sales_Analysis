@@ -1,3 +1,7 @@
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
 # Set up the Streamlit page configuration
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
@@ -55,7 +59,6 @@ else:
         quantity_by_outlet = filtered_data.groupby('outlet name')['quantity'].sum().reset_index()
         fig_quantity = px.bar(quantity_by_outlet, x='outlet name', y='quantity', title='Total Quantity by Outlet', color='quantity', color_continuous_scale=px.colors.sequential.Viridis)
         st.plotly_chart(fig_quantity, use_container_width=True)
-
     # Statistics Tab
     with tabs[1]:
         st.header("Summary Statistics")
