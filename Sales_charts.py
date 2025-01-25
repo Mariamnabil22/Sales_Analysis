@@ -3,22 +3,21 @@ import pandas as pd
 import plotly.express as px
 import os
 
-# Set up the Streamlit page configuration
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
-# Load dataset from OneDrive
+
 csv_file_path = r'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 
-# Load the CSV file
+
 try:
-    combined_data = pd.read_csv(csv_file_path, parse_dates=['date'], on_bad_lines='skip')  # Load and parse dates
-    st.write(combined_data.head())  # Display the first few rows
-    st.write(combined_data.columns)  # Print the columns to check
+    combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip') 
+    st.write(combined_data.head())  
+    st.write(combined_data.columns)  
+    combined_data.columns = combined_data.columns.str.strip()  
 except Exception as e:
     st.error(f"Error loading data: {e}")
-    st.stop()  # Stop execution if the file cannot be loaded
+    st.stop()  
 
-# Check if 'date' column exists
 if 'date' in combined_data.columns:
     combined_data['Year'] = combined_data['date'].dt.year
 else:
