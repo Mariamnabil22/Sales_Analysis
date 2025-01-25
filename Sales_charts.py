@@ -6,8 +6,7 @@ import plotly.express as px
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
 # Load dataset from OneDrive
-csv_file_path = 'https://1drv.ms/x/c/9f3ccf37d8e48827/ESuCadfN6h5Ims6K9z9mNgUBqVEiI2XxhiD0F-vnRszrtQ?e=FJFZ2e'
-
+csv_file_path =  OneDrive
 # Load the CSV file
 try:
     combined_data = pd.read_csv(csv_file_path, parse_dates=['date'])  # Ensure 'date' is parsed as datetime
