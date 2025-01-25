@@ -1,3 +1,7 @@
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
 # Set up the Streamlit page configuration
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
@@ -9,7 +13,6 @@ try:
     combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')  # Skip bad lines
     st.write(combined_data.head())  # Display the first few rows
     st.write(combined_data.columns)  # Print the columns to check
-    combined_data.columns = combined_data.columns.str.strip()  # Strip spaces from column names
 except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()  # Stop execution if the file cannot be loaded
