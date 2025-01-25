@@ -6,21 +6,24 @@ import os
 # Set up the Streamlit page configuration
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
-# Load  dataset
+# Load dataset from OneDrive
 csv_file_path = r'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 
-# Check if the file exists
-if os.path.exists(csv_file_path):
-    combined_data = pd.read_csv(csv_file_path, parse_dates=['date'])  # Ensure 'date' is parsed as datetime
-else:
-    st.error("The combined data file does not exist. Please check the file path.")
-    st.stop()  # Stop execution if the file is not found
+# Load the CSV file
+try:
+    combined_data = pd.read_csv(csv_file_path, parse_dates=['date'], on_bad_lines='skip')  # Load and parse dates
+    st.write(combined_data.head())  # Display the first few rows
+    st.write(combined_data.columns)  # Print the columns to check
+except Exception as e:
+    st.error(f"Error loading data: {e}")
+    st.stop()  # Stop execution if the file cannot be loaded
 
-# st.write(combined_data.columns) 
-
-# If 'Year' column does not exist, create it from the 'date' column
-if 'Year' not in combined_data.columns:
+# Check if 'date' column exists
+if 'date' in combined_data.columns:
     combined_data['Year'] = combined_data['date'].dt.year
+else:
+    st.error("The 'date' column is missing from the data.")
+    st.stop()ar
 
 # Sidebar for user inputs
 st.sidebar.header("User  Input Features")
