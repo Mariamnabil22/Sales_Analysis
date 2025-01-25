@@ -1,7 +1,3 @@
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-
 # Set up the Streamlit page configuration
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
@@ -11,12 +7,19 @@ csv_file_path = r'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 # Load the CSV file
 try:
     combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')  # Skip bad lines
-    print(combined_data.columns)  # Print the columns to check
+    st.write(combined_data.head())  # Display the first few rows
+    st.write(combined_data.columns)  # Print the columns to check
+    combined_data.columns = combined_data.columns.str.strip()  # Strip spaces from column names
 except Exception as e:
-    print(f"Error loading data: {e}")
-# If 'Year' column does not exist, create it from the 'date' column
-if 'Year' not in combined_data.columns:
+    st.error(f"Error loading data: {e}")
+    st.stop()  # Stop execution if the file cannot be loaded
+
+# Check if 'date' column exists
+if 'date' in combined_data.columns:
     combined_data['Year'] = combined_data['date'].dt.year
+else:
+    st.error("The 'date' column is missing from the data.")
+    st.stop()
 
 # Sidebar for user inputs
 st.sidebar.header("User  Input Features")
@@ -42,6 +45,7 @@ if filtered_data.empty:
 else:
     # Create tabs for different sections
     tabs = st.tabs(["Charts", "Statistics"])
+
 
     # Charts Tab
     with tabs[0]:
