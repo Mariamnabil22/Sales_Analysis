@@ -1,40 +1,59 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+
+
 # Set the CSV file path
 csv_file_path = 'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 
 try:
-    # Load the CSV file
-    combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')
+    # Make a request to the URL
+    response = requests.get(csv_file_path)
     
-    # Display the first few rows and column names for debugging
-    st.write("DataFrame Head:")
-    st.write(combined_data.head())
-    st.write("Column Names:")
-    st.write(combined_data.columns)
+    # Check if the response is HTML
+    if response.headers['Content-Type'] == 'text/html':
+        st.error("The URL returned HTML content instead of a CSV file. Please check the link.")
+        st.write(response.text)  # Display the HTML content for debugging
+    else:
+        # Load the CSV file
+        combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')
+        
+        # Display the first few rows and column names for debugging
+        st.write("DataFrame Head:")
+        st.write(combined_data.head())
+        st.write("Column Names:")
+        st.write(combined_data.columns)
 
-    # Clean column names by stripping whitespace
-    combined_data.columns = combined_data.columns.str.strip()
-    
-    # Convert all column names to lowercase to avoid case sensitivity issues
-    combined_data.columns = combined_data.columns.str.lower()
+        # Clean column names by stripping whitespace
+        combined_data.columns = combined_data.columns.str.strip()
+        
+        # Convert all column names to lowercase to avoid case sensitivity issues
+        combined_data.columns = combined_data.columns.str.lower()
 
-    # Check if 'date' column exists
-    if 'date' in combined_data.columns:
-        # Check the data type of the 'date' column
-        st.write("Data type of 'date' column:", combined_data['date'].dtype)
-        
-        # Convert 'date' to datetime format
-        combined_data['date'] = pd.to_datetime(combined_data['date'], errors='coerce')
-        
-        # Check for NaN values in the 'date' column
-        st.write("Number of NaN values in 'date' column:", combined_data['date'].isnull().sum())
-        
-        # If all values are NaN, raise an error
-        if combined_data['date'].isnull().all():
-            st.error("The 'date' column could not be converted to datetime.")
+        # Check if 'date' column exists
+        if 'date' in combined_data.columns:
+            # Check the data type of the 'date' column
+            st.write("Data type of 'date' column:", combined_data['date'].dtype)
+            
+            # Convert 'date' to datetime format
+            combined_data['date'] = pd.to_datetime(combined_data['date'], errors='coerce')
+            
+            # Check for NaN values in the 'date' column
+            st.write("Number of NaN values in 'date' column:", combined_data['date'].isnull().sum())
+            
+            # If all values are NaN, raise an error
+            if combined_data['date'].isnull().all():
+                st.error("The 'date' column could not be converted to datetime.")
+                st.stop()
+            
+            # Create a new 'Year' column
+            combined_data['Year'] = combined_data['date'].dt.year
+        else:
+            st.error("The 'date' column is missing from the data.")
             st.stop()
+
+except Exception as e:
+    st.error(f"Error loading data: {e}")
         
         # Create a new 'Year' column
         combined_data['Year'] = combined_data['date'].dt.year
