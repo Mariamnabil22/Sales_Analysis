@@ -17,6 +17,9 @@ except Exception as e:
 
 # Check if 'date' column exists
 if 'date' in combined_data.columns:
+    # Check the data type of the 'date' column
+    st.write("Data type of 'date' column:", combined_data['date'].dtype)
+    
     # Convert 'date' to datetime format
     combined_data['date'] = pd.to_datetime(combined_data['date'], errors='coerce')
     
@@ -24,6 +27,11 @@ if 'date' in combined_data.columns:
     if combined_data['date'].isnull().all():
         st.error("The 'date' column could not be converted to datetime.")
         st.stop()
+    
+    combined_data['Year'] = combined_data['date'].dt.year
+else:
+    st.error("The 'date' column is missing from the data.")
+    st.stop()
     
     combined_data['Year'] = combined_data['date'].dt.year
 else:
