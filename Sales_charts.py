@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import requests  # Make sure to import requests
+import requests
+from io import StringIO  # Import StringIO from the io module
 
 # Set the CSV file path
 csv_file_path = 'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
@@ -16,7 +17,7 @@ try:
         st.write(response.text)  # Display the HTML content for debugging
     else:
         # Load the CSV file from the response content
-        combined_data = pd.read_csv(pd.compat.StringIO(response.text), on_bad_lines='skip')
+        combined_data = pd.read_csv(StringIO(response.text), on_bad_lines='skip')
         
         # Display the first few rows and column names for debugging
         st.write("DataFrame Head:")
