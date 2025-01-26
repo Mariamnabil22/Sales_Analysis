@@ -55,25 +55,6 @@ try:
 except Exception as e:
     st.error(f"Error loading data: {e}")
         
-        # Create a new 'Year' column
-        combined_data['Year'] = combined_data['date'].dt.year
-    else:
-        st.error("The 'date' column is missing from the data.")
-        st.stop()
-
-except Exception as e:
-    st.error(f"Error loading data: {e}")
-    st.stop()
-
-except Exception as e:
-    st.error(f"Error loading data: {e}")
-    st.stop()
-    combined_data['Year'] = combined_data['date'].dt.year
-else:
-    st.error("The 'date' column is missing from the data.")
-    st.stop()
-
-
 # Sidebar for user inputs
 st.sidebar.header("User  Input Features")
 show_data = st.sidebar.checkbox('Show Data', False)
