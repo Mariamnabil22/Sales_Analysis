@@ -1,38 +1,26 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
-
-st.set_page_config(layout="wide", page_title="Sales Dashboard")
-
 csv_file_path = 'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 
 try:
-    combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip') 
-    combined_data.columns = combined_data.columns.str.strip()  # Strip whitespace from column names
+    combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')
+    combined_data.columns = combined_data.columns.str.strip()  # Clean column names
+    combined_data.columns = combined_data.columns.str.lower()  # Convert to lowercase
     st.write(combined_data.head())  # Display the first few rows
     st.write(combined_data.columns)  # Display column names for debugging
 
-    # Convert all column names to lowercase
-    combined_data.columns = combined_data.columns.str.lower()
+    if 'date' in combined_data.columns:
+        st.write("Data type of 'date' column:", combined_data['date'].dtype)
+        combined_data['date'] = pd.to_datetime(combined_data['date'], errors='coerce')
+        st.write("Number of NaN values in 'date' column:", combined_data['date'].isnull().sum())
+    else:
+        st.error("The 'date' column is missing from the data.")
+        st.stop()
 
 except Exception as e:
     st.error(f"Error loading data: {e}")
-    st.stop()  
-
-# Check if 'date' column exists
-if 'date' in combined_data.columns:
-    # Check the data type of the 'date' column
-    st.write("Data type of 'date' column:", combined_data['date'].dtype)
-    
-    # Convert 'date' to datetime format
-    combined_data['date'] = pd.to_datetime(combined_data['date'], errors='coerce')
-    
-    # Check if conversion was successful
-    if combined_data['date'].isnull().all():
-        st.error("The 'date' column could not be converted to datetime.")
-        st.stop()
-    
+    st.stop()
     combined_data['Year'] = combined_data['date'].dt.year
 else:
     st.error("The 'date' column is missing from the data.")
