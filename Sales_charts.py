@@ -7,7 +7,7 @@ import os
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
 # Load  dataset
-csv_file_path = r'D:\Epsilon Python\fina project\filtered_data.csv'
+csv_file_path = r'compressed_data.csv.gz'
 
 # Check if the file exists
 if os.path.exists(csv_file_path):
