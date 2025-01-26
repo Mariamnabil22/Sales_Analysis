@@ -2,15 +2,20 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+
 st.set_page_config(layout="wide", page_title="Sales Dashboard")
 
-csv_file_path = r'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
+csv_file_path = 'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
 
 try:
     combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip') 
     combined_data.columns = combined_data.columns.str.strip()  # Strip whitespace from column names
-    st.write(combined_data.head())  
+    st.write(combined_data.head())  # Display the first few rows
     st.write(combined_data.columns)  # Display column names for debugging
+
+    # Convert all column names to lowercase
+    combined_data.columns = combined_data.columns.str.lower()
+
 except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()  
@@ -32,6 +37,7 @@ if 'date' in combined_data.columns:
 else:
     st.error("The 'date' column is missing from the data.")
     st.stop()
+
 
 # Sidebar for user inputs
 st.sidebar.header("User  Input Features")
