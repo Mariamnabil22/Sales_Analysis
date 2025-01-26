@@ -32,12 +32,6 @@ if 'date' in combined_data.columns:
 else:
     st.error("The 'date' column is missing from the data.")
     st.stop()
-    
-    combined_data['Year'] = combined_data['date'].dt.year
-else:
-    st.error("The 'date' column is missing from the data.")
-    st.stop()
-
 
 # Sidebar for user inputs
 st.sidebar.header("User  Input Features")
