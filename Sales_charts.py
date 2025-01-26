@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import requests
-from io import StringIO  # Import StringIO from the io module
+from io import StringIO
 
 # Set the CSV file path
 csv_file_path = 'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
@@ -57,7 +57,7 @@ except Exception as e:
     st.error(f"Error loading data: {e}")
 
 # Sidebar for user inputs
-st.sidebar.header("User  Input Features")
+st.sidebar.header("User   Input Features")
 show_data = st.sidebar.checkbox('Show Data', False)
 
 # User input selections
