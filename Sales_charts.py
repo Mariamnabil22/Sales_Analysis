@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
+import requests  # Make sure to import requests
 
 # Set the CSV file path
 csv_file_path = 'https://1drv.ms/u/s!9f3ccf37d8e48827?download=1'
@@ -15,8 +15,8 @@ try:
         st.error("The URL returned HTML content instead of a CSV file. Please check the link.")
         st.write(response.text)  # Display the HTML content for debugging
     else:
-        # Load the CSV file
-        combined_data = pd.read_csv(csv_file_path, on_bad_lines='skip')
+        # Load the CSV file from the response content
+        combined_data = pd.read_csv(pd.compat.StringIO(response.text), on_bad_lines='skip')
         
         # Display the first few rows and column names for debugging
         st.write("DataFrame Head:")
@@ -54,16 +54,31 @@ try:
 
 except Exception as e:
     st.error(f"Error loading data: {e}")
-        
+
 # Sidebar for user inputs
 st.sidebar.header("User  Input Features")
 show_data = st.sidebar.checkbox('Show Data', False)
 
 # User input selections
-outlet_class = st.sidebar.selectbox('Select Outlet Class', combined_data['outlet class'].unique())
-category = st.sidebar.selectbox('Select Category', combined_data['category'].unique())
-subcategory = st.sidebar.selectbox('Select Subcategory', combined_data['subcategory'].unique())
-year = st.sidebar.selectbox('Select Year', combined_data['Year'].unique()) 
+if 'outlet class' in combined_data.columns:
+    outlet_class = st.sidebar.selectbox('Select Outlet Class', combined_data['outlet class'].unique())
+else:
+    st.error("The 'outlet class' column is missing from the data.")
+
+if 'category' in combined_data.columns:
+    category = st.sidebar.selectbox('Select Category', combined_data['category'].unique())
+else:
+    st.error("The 'category' column is missing from the data.")
+
+if 'subcategory' in combined_data.columns:
+    subcategory = st.sidebar.selectbox('Select Subcategory', combined_data['subcategory'].unique())
+else:
+    st.error("The 'subcategory' column is missing from the data.")
+
+if 'Year' in combined_data.columns:
+    year = st.sidebar.selectbox('Select Year', combined_data['Year'].unique())
+else:
+    st.error("The 'Year' column is missing from the data.")
 
 # Filter data based on user input
 filtered_data = combined_data[
